@@ -9,6 +9,7 @@ import (
 	"github.com/vietnamz/cli-common/api/server/httputils"
 	"github.com/vietnamz/cli-common/api/server/middleware"
 	"github.com/vietnamz/cli-common/api/server/router"
+	"github.com/vietnamz/cli-common/daemon"
 	"net"
 	"net/http"
 	"strings"
@@ -21,6 +22,7 @@ type Config struct {
 	Logging bool
 	CorsHeader string
 	Version string
+	APIVersion  daemon.Version
 	TLSConfig   *tls.Config
 }
 

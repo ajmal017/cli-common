@@ -6,12 +6,15 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/vietnamz/cli-common/cli"
+	"github.com/vietnamz/cli-common/daemon"
 	"github.com/vietnamz/cli-common/daemon/config"
 	"io"
 	"os"
+	"path/filepath"
+	"runtime"
 )
 
-func initLogging(_, stderr io.Writer )  {
+func initLogging( _, stderr io.Writer )  {
 	logrus.SetOutput( stderr)
 }
 func runDaemon(opts *daemonOptions) (err error) {
@@ -19,10 +22,18 @@ func runDaemon(opts *daemonOptions) (err error) {
 	return daemonCli.start(opts)
 }
 func newDaemonCommand() (*cobra.Command, error) {
+	// read the root of project dir.
+	_, b, _, _ := runtime.Caller(0)
+	basePath   := filepath.Dir(b)
+	// read information from version.txt
+	ver, release, err := daemon.ReadVersionFromFile( basePath + "/version.txt")
+	if err != nil {
+		return nil, err
+	}
 	opts := newDaemonOptions(config.NewDaemonConfig())
 	cmd := &cobra.Command{
-		Use: "Prime Generation [OPTIONS]",
-		Short: "A self-sufficent runtime for application",
+		Use: "App [OPTIONS]",
+		Short: "A self-sufficient runtime for application",
 		SilenceUsage: true,
 		SilenceErrors: true,
 		Args: cli.NoArgs,
@@ -30,7 +41,7 @@ func newDaemonCommand() (*cobra.Command, error) {
 			opts.flags = cmd.Flags()
 			return runDaemon(opts)
 		},
-		Version: fmt.Sprintf("%s, build %s", "1.0.0", "master"),
+		Version: fmt.Sprintf("app version %s, release %s build %s", ver.ToString(), release, "master"),
 	}
 	flags := cmd.Flags()
 	flags.BoolP("version", "v", false, "Print version information and quit")

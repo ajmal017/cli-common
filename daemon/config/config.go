@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	"io"
 	"io/ioutil"
@@ -159,6 +160,7 @@ func findConfigurationConflicts(config map[string]interface{}, flags *pflag.Flag
 func getConflictFreeConfiguration(configFile string, flags *pflag.FlagSet) (*Config, error) {
 	b, err := ioutil.ReadFile(configFile)
 	if err != nil {
+		logrus.Errorf("Failed to read config file %s with %s", configFile, err)
 		return nil, err
 	}
 

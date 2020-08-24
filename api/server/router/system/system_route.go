@@ -2,7 +2,10 @@ package system
 
 import (
 	"context"
+	"github.com/vietnamz/cli-common/api/server/httputils"
+	"github.com/vietnamz/cli-common/api/types"
 	"net/http"
+	"runtime"
 )
 
 func (s *systemRouter) pingHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, vars map[string]string) error {
@@ -13,6 +16,12 @@ func (s *systemRouter) pingHandler(ctx context.Context, w http.ResponseWriter, r
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.Header().Set("Content-Length", "0")
 	}
-	_, err := w.Write([]byte{'O', 'K'})
+	ping := types.Ping{
+		APIVersion: "v1",
+		OSType: runtime.GOOS,
+		Experimental: false,
+		BuilderVersion: "test",
+	}
+	err := httputils.WriteJSON(w, 200, ping)
 	return err
 }

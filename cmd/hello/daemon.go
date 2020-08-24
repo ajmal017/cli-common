@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/docker/docker/pkg/homedir"
 	"github.com/docker/docker/pkg/signal"
 	"github.com/docker/go-connections/tlsconfig"
 	"github.com/pkg/errors"
@@ -40,14 +39,14 @@ func (cli *DaemonCli) stop() {
 }
 
 func getDefaultDaemonConfigDir() (string, error) {
-	// NOTE: CLI uses ~/.docker while the daemon uses ~/.config/docker, because
-	// ~/.docker was not designed to store daemon configurations.
-	// In future, the daemon directory may be renamed to ~/.config/moby-engine (?).
-	configHome, err := homedir.GetConfigHome()
+	// NOTE: CLI uses ~/.CopyTrade/[app_name].json
+	// in production, we put the configuration into /etc/CopyTrade/[app_name].json
+	// However, We should do that in command line options.
+	configHome, err := os.UserHomeDir()
 	if err != nil {
 		return "", nil
 	}
-	return filepath.Join(configHome, "prime"), nil
+	return filepath.Join(configHome, ".copytrade"), nil
 }
 
 func getDefaultDaemonConfigFile() (string, error) {
@@ -55,7 +54,10 @@ func getDefaultDaemonConfigFile() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(dir, "prime.json"), nil
+	filename:=filepath.Base(os.Args[0])
+	filename = fmt.Sprintf("%s.json", filename)
+	logrus.Infof("The config filename is %s", filename)
+	return filepath.Join(dir, filename), nil
 }
 func loadDaemonCliConfig(opts *daemonOptions) (*config.Config, error) {
 	conf := opts.daemonConfig
@@ -67,14 +69,16 @@ func loadDaemonCliConfig(opts *daemonOptions) (*config.Config, error) {
 	conf.TLSVerify = opts.TLSVerify
 
 	if opts.TLSOptions != nil {
-		logrus.Printf("Tls not null")
+		logrus.Infof("TLSOptions: %s, %s, %s", opts.TLSOptions.CAFile, opts.TLSOptions.CertFile, opts.TLSOptions.KeyFile)
 		conf.CAFile = opts.TLSOptions.CAFile
 		conf.CertFile = opts.TLSOptions.CertFile
 		conf.KeyFile = opts.TLSOptions.KeyFile
 	}
 	if opts.configFile != "" {
+		logrus.Infof("The config file was put under %s", opts.configFile)
 		c, err := config.MergeDaemonConfigurations(conf, flags, opts.configFile)
 		if err != nil {
+			logrus.Infof("The config file was put under %s", opts.configFile)
 			if flags.Changed("config-file") || !os.IsNotExist(err) {
 				return nil, errors.Wrapf(err, "unable to configure the Docker daemon with file %s", opts.configFile)
 			}
@@ -118,9 +122,9 @@ func newAPIServerConfig( cli *DaemonCli) (*apiServer.Config, error) {
 
 func (cli *DaemonCli) initMiddleware( s *apiServer.Server, cfg *apiServer.Config ) error {
 	v := cfg.Version
-	vm := middleware.NewVersionMiddleware(v, api.DefaultVersion, api.MinVersion)
+	vm := middleware.NewVersionMiddleware(v, api.DefaultVersion, api.DefaultVersion)
 	s.UseMiddleware(vm)
-	logrus.Printf("init the cors middleware %s" , cfg.CorsHeader)
+	logrus.Infof("init the cors middleware %s" , cfg.CorsHeader)
 	if cfg.CorsHeader != "" {
 		c := middleware.NewCORSMiddleware(cfg.CorsHeader)
 		s.UseMiddleware(c)
@@ -158,11 +162,24 @@ func loadListeners(cli *DaemonCli, serverConfig *apiServer.Config) ([]string, er
 	logrus.Printf("Listener created for HTTP on %s (%s)", proto, addr)
 	hosts = append(hosts, protoAddrParts[1])
 	cli.api.Accept(addr, ls...)
-
 	return hosts, nil
 }
 
 func (cli *DaemonCli) start(opts *daemonOptions) (err error )  {
+
+	// setup logging.
+	logrus.SetLevel(logrus.ErrorLevel)
+	if opts.LogLevel != "" {
+		logrus.Infof("log is set at level %s ", opts.LogLevel)
+		level, err := logrus.ParseLevel(opts.LogLevel)
+		if err == nil {
+			logrus.SetLevel(level)
+		}
+	}
+	// done setup loggin.
+
+
+	// start a daemon app.
 	logrus.Info("Start a daemon")
 	stopc := make(chan bool)
 	defer close(stopc)
@@ -171,6 +188,7 @@ func (cli *DaemonCli) start(opts *daemonOptions) (err error )  {
 	if cli.Config, err = loadDaemonCliConfig(opts); err != nil {
 		return err
 	}
+
 	logrus.Info("Starting up")
 	cli.flags = opts.flags
 	cli.Config.ConfigFile = opts.configFile
@@ -185,20 +203,22 @@ func (cli *DaemonCli) start(opts *daemonOptions) (err error )  {
 	serverConfig, err := newAPIServerConfig(cli)
 
 	if err != nil {
+		logrus.Errorf("Failed to create api server")
 		return errors.Wrap(err, "Failed to create api server")
 	}
 
 	cli.api = apiServer.New(serverConfig)
 	_, err = loadListeners(cli, serverConfig)
 	if err != nil {
-		return errors.Wrap(err, "failed to load lister")
+		logrus.Errorf("Failed to load listener")
+		return errors.Wrap(err, "failed to load listener")
 	}
 
 	// create a context so that we can control how to terminate a app.
 	_, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	signal.Trap(func() {
-		logrus.Print("graceful to close")
+		logrus.Errorf("graceful to close")
 		cli.stop()
 		<-stopc // wait for daemonCli.start() to return
 	}, logrus.StandardLogger())

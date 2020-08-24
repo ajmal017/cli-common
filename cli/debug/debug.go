@@ -12,7 +12,7 @@ func Enable() {
 
 func Disable() {
 	os.Setenv("DEBUG", "")
-	logrus.SetLevel(logrus.InfoLevel)
+	logrus.SetLevel(logrus.ErrorLevel)
 }
 
 func isEnabled() bool {
