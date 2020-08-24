@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/vietnamz/prime-generator/api/server/httputils"
+	"github.com/vietnamz/cli-common/api/server/httputils"
 	"net/http"
 )
 
