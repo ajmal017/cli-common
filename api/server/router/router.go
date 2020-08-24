@@ -1,6 +1,6 @@
 package router
 
-import "github.com/vietnamz/cli-comoon/api/server/httputils"
+import "github.com/vietnamz/cli-common/api/server/httputils"
 
 // Router defines an interfaces to specify a group of routes to add to the server
 type Router interface {

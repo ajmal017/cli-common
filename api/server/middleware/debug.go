@@ -1,4 +1,4 @@
-package middleware // import "github.com/docker/docker/api/server/middleware"
+package middleware
 
 import (
 	"bufio"
@@ -10,7 +10,7 @@ import (
 
 	"github.com/docker/docker/pkg/ioutils"
 	"github.com/sirupsen/logrus"
-	"github.com/vietnamz/cli-comoon/api/server/httputils"
+	"github.com/vietnamz/cli-common/api/server/httputils"
 )
 
 // DebugRequestMiddleware dumps the request to logger

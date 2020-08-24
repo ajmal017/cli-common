@@ -1,6 +1,6 @@
 package system
 
-import "github.com/vietnamz/cli-comoon/api/server/router"
+import "github.com/vietnamz/cli-common/api/server/router"
 // System route is used to monitor the health of the api.
 type systemRouter struct {
 	routes []router.Route

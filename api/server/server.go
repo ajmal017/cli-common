@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	"github.com/vietnamz/cli-comoon/api/server/httputils"
-	"github.com/vietnamz/cli-comoon/api/server/middleware"
-	"github.com/vietnamz/cli-comoon/api/server/router"
+	"github.com/vietnamz/cli-common/api/server/httputils"
+	"github.com/vietnamz/cli-common/api/server/middleware"
+	"github.com/vietnamz/cli-common/api/server/router"
 	"net"
 	"net/http"
 	"strings"
@@ -124,7 +124,7 @@ func (s *Server) createMux() *mux.Router  {
 }
 
 // Wait blocks the server goroutine util it exits.
-// It sends an error message if there is anay error during
+// It sends an error message if there is any error during
 // The API execution.
 func (s *Server) Wait( waitChain chan error) {
 	if err  := s.ServeAPI(); err != nil {

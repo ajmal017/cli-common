@@ -5,8 +5,8 @@ import (
 	"github.com/docker/docker/pkg/term"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/vietnamz/cli-comoon/cli"
-	"github.com/vietnamz/cli-comoon/daemon/config"
+	"github.com/vietnamz/cli-common/cli"
+	"github.com/vietnamz/cli-common/daemon/config"
 	"io"
 	"os"
 )

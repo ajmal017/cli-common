@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/vietnamz/cli-comoon/api/server/httputils"
-	"github.com/vietnamz/cli-comoon/api/types/versions"
+	"github.com/vietnamz/cli-common/api/server/httputils"
+	"github.com/vietnamz/cli-common/api/types/versions"
 )
 
 // VersionMiddleware is a middleware that

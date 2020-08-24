@@ -1,4 +1,4 @@
-module github.com/vietnamz/cli-comoon
+module github.com/vietnamz/cli-common
 
 go 1.14
 

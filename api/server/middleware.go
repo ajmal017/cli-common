@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/vietnamz/cli-comoon/api/server/httputils"
-	"github.com/vietnamz/cli-comoon/api/server/middleware"
+	"github.com/vietnamz/cli-common/api/server/httputils"
+	"github.com/vietnamz/cli-common/api/server/middleware"
 )
 
 func (s *Server) handlerWithGlobalMiddlewares( handler httputils.APIFunc) httputils.APIFunc {

@@ -1,7 +1,7 @@
 package daemon
 
 import (
-	"github.com/vietnamz/cli-comoon/daemon/config"
+	"github.com/vietnamz/cli-common/daemon/config"
 )
 
 // Daemon is entry to keep all the backend services to serve the API.
