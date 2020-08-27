@@ -1,8 +1,10 @@
 # Prime generator Application
 
 ## Ubuntu 18.04 
+
 This is a golang structure was cloned from https://github.com/golang-standards/project-layout. 
-# Local DEV environment is
+
+# DEV environment.
 * MacOS Catalina 10.15.1
 * Clang version 11.0.0
 * Go 1.14.6
@@ -10,7 +12,8 @@ This is a golang structure was cloned from https://github.com/golang-standards/p
 * docker-compose version 1.24.1, build 4667896b
 
 
-## Lib used.
+## Technologies and Libraries.
+
 Cobra [`Cobra`](https://github.com/spf13/cobra) a very powerful library to build cli.
 Logrus [`Logrus`](https://github.com/sirupsen/logrus): log utilities.
 Moby [`Go moby`] project (https://github.com/moby/moby)
