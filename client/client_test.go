@@ -6,7 +6,7 @@ import (
 )
 
 func TestNewClientWithOpts(t *testing.T) {
-	cli, err := NewClientWithOpts(WithHost("http://localhost:8080"), WithBinanceSignedEP())
+	cli, err := NewClientWithOpts(WithHost("http://localhost:8080"))
 	if err != nil {
 		t.Errorf("%s", err)
 	}
