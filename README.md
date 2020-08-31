@@ -1,4 +1,4 @@
-# Prime generator Application
+# Copy Trade app
 
 ## Ubuntu 18.04 
 
@@ -14,9 +14,9 @@ This is a golang structure was cloned from https://github.com/golang-standards/p
 
 ## Technologies and Libraries.
 
-Cobra [`Cobra`](https://github.com/spf13/cobra) a very powerful library to build cli.
-Logrus [`Logrus`](https://github.com/sirupsen/logrus): log utilities.
-Moby [`Go moby`] project (https://github.com/moby/moby)
+* Cobra [`Cobra`](https://github.com/spf13/cobra)
+* Logrus [`Logrus`](https://github.com/sirupsen/logrus)
+* Moby [`Go moby`] project (https://github.com/moby/moby)
 
 
 ## How to build locally
