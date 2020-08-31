@@ -1,6 +1,7 @@
 package client
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"path"
 
@@ -18,7 +19,7 @@ func (cli *Client) Ping(ctx context.Context) (types.Ping, error) {
 	// Using cli.buildRequest() + cli.doRequest() instead of cli.sendRequest()
 	// because ping requests are used during API version negotiation, so we want
 	// to hit the non-versioned /_ping endpoint, not /v1.xx/_ping
-	req, err := cli.buildRequest(http.MethodHead, path.Join(cli.basePath, "/_ping"), nil, nil)
+	req, err := cli.buildRequest(http.MethodHead, path.Join(cli.basePath, "/ping"), nil, nil)
 	if err != nil {
 		return ping, err
 	}
@@ -34,7 +35,7 @@ func (cli *Client) Ping(ctx context.Context) (types.Ping, error) {
 		return ping, err
 	}
 
-	req, err = cli.buildRequest(http.MethodGet, path.Join(cli.basePath, "/_ping"), nil, nil)
+	req, err = cli.buildRequest(http.MethodGet, path.Join(cli.basePath, "/ping"), nil, nil)
 	if err != nil {
 		return ping, err
 	}
@@ -52,15 +53,7 @@ func parsePingResponse(cli *Client, resp serverResponse) (types.Ping, error) {
 		err := cli.checkResponseErr(resp)
 		return ping, errdefs.FromStatusCode(err, resp.statusCode)
 	}
-	ping.APIVersion = resp.header.Get("API-Version")
-	ping.OSType = resp.header.Get("OSType")
-	if resp.header.Get("Docker-Experimental") == "true" {
-		ping.Experimental = true
-	}
-	if bv := resp.header.Get("Builder-Version"); bv != "" {
-		ping.BuilderVersion = types.BuilderVersion(bv)
-	}
-	err := cli.checkResponseErr(resp)
-	return ping, errdefs.FromStatusCode(err, resp.statusCode)
+	err :=json.NewDecoder(resp.body).Decode(&ping)
+	return ping, err
 }
 

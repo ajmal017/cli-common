@@ -159,7 +159,7 @@ func loadListeners(cli *DaemonCli, serverConfig *apiServer.Config) ([]string, er
 	if err != nil {
 		return nil, err
 	}
-	logrus.Printf("Listener created for HTTP on %s (%s)", proto, addr)
+	logrus.Debugf("Listener created for HTTP(S) on %s (%s)", proto, addr)
 	hosts = append(hosts, protoAddrParts[1])
 	cli.api.Accept(addr, ls...)
 	return hosts, nil
@@ -176,7 +176,7 @@ func (cli *DaemonCli) start(opts *daemonOptions) (err error )  {
 			logrus.SetLevel(level)
 		}
 	}
-	// done setup loggin.
+	// done setup log in.
 
 
 	// start a daemon app.

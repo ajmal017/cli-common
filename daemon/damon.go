@@ -4,9 +4,17 @@ import (
 	"github.com/vietnamz/cli-common/daemon/config"
 )
 
+type Database struct {
+
+}
+type MessageQueue struct {
+
+}
 // Daemon is entry to keep all the backend services to serve the API.
 type Daemon struct {
 	 config *config.Config
+	 Db *Database
+	 Mq* MessageQueue
 }
 
 // Constructor.

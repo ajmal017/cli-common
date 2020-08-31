@@ -34,6 +34,9 @@ type daemonOptions struct {
 	TLS          bool
 	TLSVerify    bool
 	TLSOptions   *tlsconfig.Options
+
+	// mysql
+	MySQLHost string
 }
 
 
@@ -89,6 +92,7 @@ func (o *daemonOptions) InstallFlags(flags *pflag.FlagSet) {
 	flags.StringVarP(&o.LogLevel, "log-level", "l", "info", `Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")`)
 	flags.BoolVar(&o.TLS, "tls", false, "Use TLS; implied by --tlsverify")
 	flags.BoolVar(&o.TLSVerify, FlagTLSVerify, tLSVerify, "Use TLS and verify the remote")
+	flags.StringVar(&o.MySQLHost, "mysql", "127.0.0.1:3306", "MySQL database host strings")
 
 	// TODO use flag flags.String("identity"}, "i", "", "Path to libtrust key file")
 

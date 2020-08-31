@@ -54,7 +54,7 @@ import (
 	"strings"
 )
 
-var DefaultDockerHost = "tcp://127.0.0.1"
+var DefaultHost = "tcp://127.0.0.1"
 var defaultProto = "tcp"
 var defaultAddr = "127.0.0.1"
 
@@ -115,12 +115,12 @@ func CheckRedirect(req *http.Request, via []*http.Request) error {
 // highly recommended that you set a version or your client may break if the
 // server is upgraded.
 func NewClientWithOpts(ops ...Opt) (*Client, error) {
-	client, err := defaultHTTPClient(DefaultDockerHost)
+	client, err := defaultHTTPClient(DefaultHost)
 	if err != nil {
 		return nil, err
 	}
 	c := &Client{
-		host:    DefaultDockerHost,
+		host:    DefaultHost,
 		version: api.DefaultVersion,
 		client:  client,
 		proto:   defaultProto,

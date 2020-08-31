@@ -10,7 +10,7 @@ import (
 type RouteWrapper func(r Route ) Route
 
 // localRoute defines an individual API route to connect
-// with the daemn. It implements Route.
+// with the db, message queue, etc.... It implements Route.
 
 type localRoute struct {
 	method string

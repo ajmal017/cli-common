@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"io"
 	"io/ioutil"
 	"net"
@@ -112,6 +113,7 @@ func (cli *Client) sendRequest(ctx context.Context, method, path string, query u
 	}
 	resp, err := cli.doRequest(ctx, req)
 	if err != nil {
+		logrus.Errorf("error %d", resp.statusCode)
 		return resp, errdefs.FromStatusCode(err, resp.statusCode)
 	}
 	err = cli.checkResponseErr(resp)
@@ -233,15 +235,6 @@ func (cli *Client) checkResponseErr(serverResp serverResponse) error {
 }
 
 func (cli *Client) addHeaders(req *http.Request, headers headers) *http.Request {
-	// Add CLI Config's HTTP Headers BEFORE we set the Docker headers
-	// then the user can't change OUR headers
-	for k, v := range cli.customHTTPHeaders {
-		if versions.LessThan(cli.version, "1.25") && k == "User-Agent" {
-			continue
-		}
-		req.Header.Set(k, v)
-	}
-
 	if headers != nil {
 		for k, v := range headers {
 			req.Header[k] = v

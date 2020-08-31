@@ -20,7 +20,7 @@ func (s *systemRouter) pingHandler(ctx context.Context, w http.ResponseWriter, r
 		APIVersion: "v1",
 		OSType: runtime.GOOS,
 		Experimental: false,
-		BuilderVersion: "test",
+		BuilderVersion: "HelloWorld",
 	}
 	err := httputils.WriteJSON(w, 200, ping)
 	return err

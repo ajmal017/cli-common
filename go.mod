@@ -6,6 +6,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/Microsoft/hcsshim v0.8.9 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6
 	github.com/containerd/continuity v0.0.0-20200710164510-efbc4488d8fe // indirect
 	github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
 	github.com/docker/distribution v2.7.1+incompatible // indirect
@@ -13,7 +14,12 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
+	github.com/go-sql-driver/mysql v1.5.0 // indirect
+	github.com/google/go-querystring v1.0.0
 	github.com/gorilla/mux v1.7.4
+	github.com/gorilla/schema v1.2.0
+	github.com/hashicorp/consul v1.8.3 // indirect
+	github.com/hashicorp/consul/api v1.6.0
 	github.com/imdario/mergo v0.3.11
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
 	github.com/moby/moby v1.13.1 // indirect

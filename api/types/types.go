@@ -45,3 +45,74 @@ type Ping struct {
 	//! refs above.
 	BuilderVersion BuilderVersion
 }
+
+type BinanceServerTime struct {
+	ServerTime     int64    `json:"serverTime"`
+}
+/*
+{
+  "symbol": "LTCBTC",
+  "orderId": 1,
+  "orderListId": -1 //Unless part of an OCO, the value will always be -1.
+  "clientOrderId": "myOrder1",
+  "price": "0.1",
+  "origQty": "1.0",
+  "executedQty": "0.0",
+  "cummulativeQuoteQty": "0.0",
+  "status": "NEW",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "stopPrice": "0.0",
+  "icebergQty": "0.0",
+  "time": 1499827319559,
+  "updateTime": 1499827319559,
+  "isWorking": true,
+  "origQuoteOrderQty": "0.000000"
+}
+ */
+type BinanceOrder struct {
+	Symbol string `json:"symbol"`
+	OrderId int64 `json:"orderId"`
+	OrderListId int64 `json:"orderListId"`
+	ClientOrderId string `json:"clientOrderId"`
+	Price string `json:"price"`
+	OrigQty string `json:"origQty"`
+	ExecutedQty string `json:"executedQty"`
+	CummulativeQuoteQty string `json:"cummulativeQuoteQty"`
+	Status string `json:"status"`
+	TimeInForce string `json:"timeInForce"`
+	Type string `json:"type"`
+	Side string `json:"side"`
+	StopPrice string `json:"stopPrice"`
+	IcebergQty string `json:"icebergQty"`
+	Time int64 `json:"time"`
+	UpdateTime int64 `json:"updateTime"`
+	IsWorking bool `json:"isWorking"`
+	OrigQuoteOrderQty string `json:"origQuoteOrderQty"`
+}
+
+type BinanceOrderShort struct {
+	Symbol string `json:"symbol"`
+	OrderId int64 `json:"orderId"`
+	ClientOrderId string `json:"clientOrderId"`
+}
+
+type BinanceOrderParams struct {
+	Symbol string `url:"symbol"`
+	OrderId int64 `url:"orderId,omitempty"`
+	OrigClientOrderId string `url:"origClientOrderId,omitempty"`
+	RecvWindow int64 `url:"recvWindow,omitempty"`
+	Timestamp int64 `url:"timestamp"`
+}
+
+type BinanceAllOrdersParams struct {
+	Symbol string `url:"symbol"`
+	OrderId int64 `url:"orderId,omitempty"`
+	StartTime int64 `url:"startTime,omitempty"`
+	EndTime int64 `url:"endTime,omitempty"`
+	Limit int `url:"limit,omitempty"`
+	RecvWindow int64 `url:"recvWindow,omitempty"`
+	Timestamp int64	`url:"timestamp"`
+}
+

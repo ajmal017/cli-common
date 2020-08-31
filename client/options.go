@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"github.com/sirupsen/logrus"
 	"net"
 	"net/http"
 	"os"
@@ -84,10 +85,22 @@ func WithHost(host string) Opt {
 		}
 		c.host = host
 		c.proto = hostURL.Scheme
+
+		/* TODO:
+				please investigate why I have to change c.scheme.
+				Do not understand why for now. But it works. :))
+		 */
+		c.scheme = hostURL.Scheme
+		//--------------------------------------------------------
 		c.addr = hostURL.Host
 		c.basePath = hostURL.Path
 		if transport, ok := c.client.Transport.(*http.Transport); ok {
-			return sockets.ConfigureTransport(transport, c.proto, c.addr)
+			logrus.Errorf("Configure transport proto %s, addr %s", c.proto, c.addr)
+			err = sockets.ConfigureTransport(transport, c.proto, c.addr)
+			if err != nil {
+				logrus.Errorf("Configure transport err %s", err)
+			}
+			return nil
 		}
 		return errors.Errorf("cannot apply host to transport: %T", c.client.Transport)
 	}
@@ -150,12 +163,13 @@ func WithTLSClientConfig(cacertPath, certPath, keyPath string) Opt {
 
 // WithVersion overrides the client version with the specified one. If an empty
 // version is specified, the value will be ignored to allow version negotiation.
+// With the external endpoint. We need to allow the version is different from ours.
+// So we should allow override the version here to make sure we can call the correct
+// endpoint.
 func WithVersion(version string) Opt {
 	return func(c *Client) error {
-		if version != "" {
-			c.version = version
-			c.manualOverride = true
-		}
+		c.version = version
+		c.manualOverride = true
 		return nil
 	}
 }

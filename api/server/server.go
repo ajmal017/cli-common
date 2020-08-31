@@ -81,6 +81,7 @@ func (s *Server) ServeAPI() error {
 
 func (s *Server) makeHTTPHandler( handler httputils.APIFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		logrus.Debugf("addr %s, path %s", r.Host, r.RequestURI)
 		ctx := context.WithValue(r.Context(), "APP", r.Header.Get("User-Agent"))
 		handlerFunc := s.handlerWithGlobalMiddlewares(handler)
 		vars := mux.Vars(r)

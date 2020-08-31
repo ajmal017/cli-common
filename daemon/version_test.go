@@ -5,7 +5,7 @@ import (
 )
 
 func TestReadVersionFromFile(t *testing.T) {
-	ver, rel, err := ReadVersionFromFile("../version.txt")
+	ver, rel, err := ReadVersionFromFile("version.txt")
 	if err != nil {
 		t.Fatalf("Failed encounter %s", err)
 	}
